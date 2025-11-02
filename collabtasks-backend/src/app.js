@@ -4,7 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import AppError from "./utils/AppError.js";
-
+import testRoutes from "./routes/testRoutes.js"; // ← new import
 const app = express();
 
 // Middleware
@@ -21,6 +21,14 @@ app.get("/health", (req, res) => {
 app.get("/error", (req, res, next) => {
   next(new AppError("Simulated failure for testing 🔥", 400));
 });
+app.use("/api/v1/test", testRoutes); // ← mount new route
+
+// Handle unknown routes
+// Catch all unmatched routes (Express 5 compatible)
+app.all(/.*/, (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
 
 // Handle unknown routes (fixed syntax)
 app.use((req, res, next) => {
