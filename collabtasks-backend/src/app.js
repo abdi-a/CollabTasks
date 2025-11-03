@@ -9,6 +9,7 @@ import AppError from "./utils/AppError.js";
 // Routes
 import testRoutes from "./routes/testRoutes.js";
 import testDbRoutes from "./routes/testDbRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
+
+app.use("/api/v1/auth", authRoutes);
 
 // Routes
 app.get("/health", (req, res) => {
